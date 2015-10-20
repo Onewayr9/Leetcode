@@ -1,3 +1,3 @@
 # Leetcode
-storing code of solved leetcode problem :)
-Fighting on Trojans!
+Some of them may be partial copied from the Internet:)
+Fight On!
