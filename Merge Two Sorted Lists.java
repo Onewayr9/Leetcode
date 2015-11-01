@@ -34,3 +34,37 @@ public class Solution {
         return fakeHead.next;
     }
 }
+/*Another Solution---Using heap*/
+public ListNode mergeKLists(ListNode[] lists) {
+        if(lists.length==0){
+            return null;
+        }
+        if(lists.length==1){
+            return lists[0];
+        }
+        for(int i=0;i<lists.length;i++){
+            ListNode head = new ListNode(0);
+            head.next = lists[i];
+            lists[i] = head;
+        }
+        PriorityQueue<ListNode> heap = new PriorityQueue<ListNode>(new Comparator<ListNode>(){
+            public int compare(ListNode l1,ListNode l2){
+                return l1.val-l2.val;
+            }
+            });
+        for(int i=0;i<lists.length;i++){
+            ListNode head = lists[i];
+            while(head.next!=null){
+                heap.offer(head.next);
+                head.next = head.next.next;
+            }
+        }
+        ListNode head = new ListNode(0);
+        ListNode node = head;
+        while(heap.size()!=0){
+            node.next = heap.poll();
+            node = node.next;
+        }
+        node.next = null;
+        return head.next;
+    }
