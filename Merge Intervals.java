@@ -61,3 +61,30 @@ public class Solution {
         return interval;
     }
 }
+/*Another Solution using List.sort(), shorter*/
+public List<Interval> merge(List<Interval> intervals) {
+        if(intervals.size()<=1){
+            return intervals;
+        }
+        intervals.sort(new Comparator<Interval>(){
+            public int compare(Interval i1,Interval i2){
+                if(i1.start!=i2.start){
+                    return i1.start-i2.start;
+                }else{
+                    return i1.end-i2.end;
+                }
+            }
+        });
+        List<Interval> ans = new ArrayList<Interval>();
+        int p1 = 0,p2 = 1;
+        for(;p2<intervals.size();p2++){
+            if(intervals.get(p2).start<=intervals.get(p1).end){
+                intervals.get(p1).end = Math.max(intervals.get(p1).end,intervals.get(p2).end);
+            }else{
+                ans.add(intervals.get(p1));
+                p1 = p2;
+            }
+        }
+        ans.add(intervals.get(p1));
+        return ans;
+    }
