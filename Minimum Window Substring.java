@@ -1,74 +1,63 @@
-import java.util.Hashtable;
 public class Solution {
     public String minWindow(String s, String t) {
         if(t.length()==0){
             return "";
         }
-        Hashtable<Character,Integer> ttable = new Hashtable<Character,Integer>();
+        HashMap<Character,Integer> map = new HashMap<>();
         for(int i=0;i<t.length();i++){
-            if(ttable.containsKey(t.charAt(i))){
-                ttable.put(t.charAt(i),ttable.get(t.charAt(i))+1);
+            if(!map.containsKey(t.charAt(i))){
+                map.put(t.charAt(i),1);
             }else{
-                ttable.put(t.charAt(i),1);
+                map.put(t.charAt(i),map.get(t.charAt(i))+1);
             }
         }
-        int len = 0,sum = 0,pointer_1 = 0,pointer_2 = 0;
-        boolean find = false;
-        Hashtable<Character,Integer> stable = new Hashtable<Character,Integer>();
-        for(;pointer_1<s.length();++pointer_1){
-            if(ttable.containsKey(s.charAt(pointer_1))){
+        char[] c = s.toCharArray();
+        int p1 = 0;
+        int findNum = 0;
+        for(;p1<c.length;p1++){
+            if(map.containsKey(c[p1])){
+                map.put(c[p1],map.get(c[p1])-1);
+                findNum++;
                 break;
             }
         }
-        if(pointer_1==s.length()) return "";
-        else if(t.length()==1) return t;
-        stable.put(s.charAt(pointer_1),1);
-        pointer_2 = pointer_1;
-        sum++;
-        for(int i=pointer_2+1;i<s.length();i++){
-            if(ttable.containsKey(s.charAt(i))){
-                if(!stable.containsKey(s.charAt(i))){
-                    stable.put(s.charAt(i),1);
-                    sum++;
-                }else if(stable.get(s.charAt(i))<ttable.get(s.charAt(i))){
-                    stable.put(s.charAt(i),stable.get(s.charAt(i))+1);
-                    sum++;
-                }else if(s.charAt(pointer_2)==s.charAt(i)){
-                    pointer_2++;
-                    for(;pointer_2<s.length();pointer_2++){
-                        if(ttable.containsKey(s.charAt(pointer_2))){
-                            if(stable.get(s.charAt(pointer_2))>ttable.get(s.charAt(pointer_2))){
-                                stable.put(s.charAt(pointer_2),stable.get(s.charAt(pointer_2))-1);
-                            }else{
-                                break;
-                            }
+        if(findNum==0) return "";
+        if(t.length()==1) return t;
+        int p2 = p1+1;
+        int minlen = s.length();
+        String ans = "";
+        for(;p2<c.length;p2++){
+            if(map.containsKey(c[p2])){
+                if(map.get(c[p2])>0){
+                    map.put(c[p2],map.get(c[p2])-1);
+                    findNum++;
+                    if(findNum==t.length()){
+                        minlen = p2-p1+1;
+                        ans = s.substring(p1,p2+1);
                     }
-                }
                 }else{
-                    stable.put(s.charAt(i),stable.get(s.charAt(i))+1);
-                }
-            }
-            if(sum==t.length()){
-                find = true;
-                if((i-pointer_2+1)<len||len==0){
-                    pointer_1 = pointer_2;
-                    len = (i-pointer_2+1);
-                }
-                stable.put(s.charAt(pointer_2),stable.get(s.charAt(pointer_2))-1);
-                pointer_2 = pointer_2+1;
-                for(;pointer_2<s.length();pointer_2++){
-                    if(ttable.containsKey(s.charAt(pointer_2))){
-                        if(stable.get(s.charAt(pointer_2))>ttable.get(s.charAt(pointer_2))){
-                            stable.put(s.charAt(pointer_2),stable.get(s.charAt(pointer_2))-1);
-                        }else{
-                            break;
+                    if(c[p2]==c[p1]){
+                        for(p1=p1+1;p1<=p2;p1++){
+                            if(map.containsKey(c[p1])){
+                                if(map.get(c[p1])<0){
+                                    map.put(c[p1],map.get(c[p1])+1);
+                                }else{
+                                    break;
+                                }
+                            }
                         }
+                        if(findNum==t.length()){
+                            if(minlen>p2-p1+1){
+                                minlen = p2-p1+1;
+                                ans = s.substring(p1,p2+1);
+                            }
+                        }
+                    }else{
+                        map.put(c[p2],map.get(c[p2])-1);
                     }
                 }
-                sum--;
             }
         }
-        if(!find) return "";
-        else return s.substring(pointer_1,pointer_1+len);
+        return ans;
     }
 }
