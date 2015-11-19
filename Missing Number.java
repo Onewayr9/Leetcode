@@ -10,3 +10,23 @@ public class Solution {
         else return real-sum;
     }
 }
+/*XOR Method O(n)*/
+public class Solution {
+    public int missingNumber(int[] nums) {
+        int ans = 0;
+        for(int i=0;i<nums.length;i++){
+            ans ^= i^nums[i];
+        }
+        return ans^nums.length;
+    }
+}
+/*Sum Method O(n)*/
+public class Solution {
+    public int missingNumber(int[] nums) {
+        int ans = 0;
+        for(int i:nums){
+            ans += i;
+        }
+        return ans-(1+nums.length)*(nums.length/2);
+    }
+}
