@@ -8,21 +8,20 @@
  * }
  */
 public class Solution {
-    int sum = 0;
     public int sumNumbers(TreeNode root) {
-        if(root==null) return 0;
-        else{
-            int temp=0;
-            sumNumbers(root,temp);
-            return sum;
-        }
+        return sumNumbers(root,0);
     }
-    public void sumNumbers(TreeNode root,int temp){
-        if(root.right==null&&root.left==null) sum += 10*temp+root.val;
-        else{
-            if(root.left!=null) sumNumbers(root.left,10*temp+root.val);
-            //System.out.println(sum);
-            if(root.right!=null) sumNumbers(root.right,10*temp+root.val);
+    public int sumNumbers(TreeNode root, int temp){
+        if(root==null) return 0;
+        int cur = 10*temp+root.val;
+        if(root.left==null&&root.right==null){
+            return cur;
+        }else if(root.left==null){
+            return sumNumbers(root.right,cur);
+        }else if(root.right==null){
+            return sumNumbers(root.left,cur);
+        }else{
+            return sumNumbers(root.left,cur)+sumNumbers(root.right,cur);
         }
     }
 }

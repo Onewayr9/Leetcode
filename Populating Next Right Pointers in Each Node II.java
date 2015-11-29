@@ -7,63 +7,30 @@
  * }
  */
 public class Solution {
-    boolean hasNextLevel = false;
     public void connect(TreeLinkNode root) {
-        if(root==null){
+        if(root==null||(root.left==null&&root.right==null)){
             return;
         }
-        TreeLinkNode NextRoot = null;
-        while(root!=null){
-            if(root.left==null&&root.right==null){
-                root = root.next;
-                continue;
-            }
-            if(root.left!=null&&root.right!=null){
-                root.left.next = root.right;
-                if(!hasNextLevel){
-                    hasNextLevel = true;
-                    NextRoot = root.left;
-                }
-            }else if(root.left!=null){
-                if(!hasNextLevel){
-                    hasNextLevel = true;
-                    NextRoot = root.left;
-                }
-            }else{
-                if(!hasNextLevel){
-                    hasNextLevel = true;
-                    NextRoot = root.right;
-                }
-            }
-            TreeLinkNode node = root.next;
+        TreeLinkNode nextLevel = root;
+        while(nextLevel!=null){
+            TreeLinkNode node = nextLevel;
+            nextLevel = null;
+            TreeLinkNode prev = null;
             while(node!=null){
-                if(node.left!=null||node.right!=null){
-                    if(root.right!=null){
-                        if(node.left!=null){
-                            root.right.next = node.left;
-                        }else{
-                            root.right.next = node.right;
-                        }
-                    }else if(root.right==null&&root.left!=null){
-                        if(node.left!=null){
-                            root.left.next = node.left;
-                        }else{
-                            root.left.next = node.right;
-                        }
+                if(!(node.left==null&&node.right==null)){
+                    if(nextLevel==null){
+                        nextLevel = node.left==null?node.right:node.left;
                     }
-                    root = node;
-                    break;
-                }else{
-                    node = node.next;
+                    if(prev!=null){
+                        prev.next = node.left==null?node.right:node.left;
+                    }
+                    if(node.left!=null&&node.right!=null){
+                        node.left.next = node.right;
+                    }
+                    prev = node.right==null?node.left:node.right;
                 }
+                node = node.next;
             }
-            if(node==null){
-                break;
-            }
-        }
-        if(hasNextLevel){
-            hasNextLevel = false;
-            connect(NextRoot);
         }
     }
 }

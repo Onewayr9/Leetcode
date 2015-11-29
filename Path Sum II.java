@@ -8,31 +8,26 @@
  * }
  */
 public class Solution {
+    List<List<Integer>> ans = new ArrayList<>();
     public List<List<Integer>> pathSum(TreeNode root, int sum) {
-        List<Integer> tempans = new ArrayList<Integer>();
-        List<List<Integer>> ans = new ArrayList<List<Integer>>();
-        return pathSum(root,sum,tempans,ans);
+        List<Integer> temp = new ArrayList<>();
+        pathSum(root,sum,temp);
+        return ans;
     }
-    public List<List<Integer>> pathSum(TreeNode root, int sum, List<Integer> tempans, List<List<Integer>> ans){
-        if(root==null)
-            return ans;
-        else{
-            sum-=root.val;
-            tempans.add(root.val);
-            if(root.left==null&&root.right==null){
-                if(sum==0)
-                    ans.add(new ArrayList<Integer>(tempans));
-            }else{
-                if(root.left!=null){
-                pathSum(root.left,sum,tempans,ans);
-                tempans.remove(tempans.size()-1);
-                }
-                if(root.right!=null){
-                pathSum(root.right,sum,tempans,ans);
-                tempans.remove(tempans.size()-1);
-                }
+    public void pathSum(TreeNode root, int sum, List<Integer> temp){
+        if(root==null){
+            return;
+        }
+        temp.add(root.val);
+        if(root.left==null&&root.right==null){
+            if(root.val==sum){
+                List<Integer> temp2 = new ArrayList<>();
+                temp2.addAll(temp);
+                ans.add(temp2);
             }
         }
-        return ans;
+        pathSum(root.left,sum-root.val,temp);
+        pathSum(root.right,sum-root.val,temp);
+        temp.remove(temp.size()-1);
     }
 }

@@ -8,43 +8,38 @@
  * }
  */
 public class Solution {
-    //2, 1
+    List<TreeNode> plist = new ArrayList<>();
+    List<TreeNode> qlist = new ArrayList<>();
     public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
-        if(root==null || p==null || q==null) return null;
-        
-        List<TreeNode> pathp = new ArrayList<>();
-        List<TreeNode> pathq = new ArrayList<>();
-        pathp.add(root);
-        pathq.add(root);
-        
-        getPath(root, p, pathp);
-        getPath(root, q, pathq);
-        
-        TreeNode lca = null;
-        for(int i=0; i<pathp.size() && i<pathq.size(); i++) {
-            if(pathp.get(i) == pathq.get(i)) lca = pathp.get(i);
-            else break;
+        find(root,p,plist);
+        find(root,q,qlist);
+        for(int i=0,j=0;i<plist.size()&&j<qlist.size();i++,j++){
+            if(plist.get(i)!=qlist.get(j)){
+                return plist.get(i-1);
+            }
         }
-        return lca;
+        return plist.size()>qlist.size()?qlist.get(qlist.size()-1):plist.get(plist.size()-1);
     }
-    
-    private boolean getPath(TreeNode root, TreeNode n, List<TreeNode> path) {
-        if(root==n) {
+    public boolean find(TreeNode root, TreeNode p, List<TreeNode> list){
+        if(root==null){
+            return false;
+        }
+        if(root==p||find(root.left,p,list)||find(root.right,p,list)){
+            list.add(0,root);
             return true;
+        }else{
+            return false;
         }
-        
-        if(root.left!=null) {
-            path.add(root.left);
-            if(getPath(root.left, n, path)) return true;
-            path.remove(path.size()-1);
-        }
-        
-        if(root.right!=null) {
-            path.add(root.right);
-            if(getPath(root.right, n, path)) return true;
-            path.remove(path.size()-1);
-        }
-        
-        return false;
+    }
+}
+
+/*better sol*/
+public class Solution {
+    public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+        if(root == null || root == p || root == q)  return root;
+        TreeNode left = lowestCommonAncestor(root.left, p, q);
+        TreeNode right = lowestCommonAncestor(root.right, p, q);
+        if(left != null && right != null)   return root;
+        return left != null ? left : right;
     }
 }
