@@ -8,29 +8,26 @@
  */
 public class Solution {
     public ListNode rotateRight(ListNode head, int k) {
-        if(k==0) return head;
         if(head==null) return head;
-        else{
-            int sum = 0;
-            ListNode now = head;
-            while(now!=null){
-                sum++;
-                now = now.next;
-            }
-            if(sum==1) return head;
-            else if(k%sum==0) return head;
-            k%=sum;
-            now = head;
-            ListNode p1=now,p2=now;
-            for(int i=0;now.next!=null;i++){
-                if(i==sum-k-1) p1 = now;
-                now = now.next;
-            }
-            p2 = now;
-            p2.next = head;
-            head = p1.next;
-            p1.next = null;
+        int length=0;
+        ListNode node = head;
+        while(node!=null){
+            length++;
+            node = node.next;
         }
-        return head;
+        k = k%length;
+        ListNode node2 = head;
+        node = head;
+        for(int i=0;i<k;i++){
+            node2 = node2.next;
+        }
+        while(node2.next!=null){
+            node = node.next;
+            node2 = node2.next;
+        }
+        node2.next = head;
+        ListNode H = node.next;
+        node.next = null;
+        return H;
     }
 }

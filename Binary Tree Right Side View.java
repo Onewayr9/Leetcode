@@ -10,20 +10,17 @@
 public class Solution {
     List<Integer> ans = new ArrayList<Integer>();
     public List<Integer> rightSideView(TreeNode root) {
-        if(root==null) return ans;
-        else{
-            rightSideView(root,1);
-            return ans;
-        }
+        dfs(root,1);
+        return ans;
     }
-    public void rightSideView(TreeNode root,int layer){
-        if(root==null) return;
-        else{
-            if(ans.size()<layer){
-                ans.add(root.val);
-            }
-            rightSideView(root.right,layer+1);
-            rightSideView(root.left,layer+1);
+    public void dfs(TreeNode root,int level){
+        if(root==null){
+            return;
         }
+        if(ans.size()<level){
+            ans.add(root.val);
+        }
+        dfs(root.right,level+1);
+        dfs(root.left,level+1);
     }
 }

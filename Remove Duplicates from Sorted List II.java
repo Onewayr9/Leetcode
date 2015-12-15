@@ -8,27 +8,20 @@
  */
 public class Solution {
     public ListNode deleteDuplicates(ListNode head) {
-        if(head==null||head.next==null) return head;
-        else{
-            ListNode newhead = new ListNode(0);
-            newhead.next = head;
-            ListNode p1 = newhead;
-            ListNode p2 = p1.next;
-            int num = p2.val;
-            int time = 1;
-            p2 = p2.next;
-            while(p2!=null){
-                if(p2.val!=num){
-                    if(time==1) p1 = p1.next;
-                    p1.next = p2;
-                    num = p2.val;
-                    time = 1;
-                }else time = 0;
-                p2 = p2.next;
+        ListNode H = new ListNode(0);
+        H.next = head;
+        ListNode node = H;
+        while(node.next!=null&&node.next.next!=null){
+            if(node.next.next.val!=node.next.val){
+                node = node.next;
+            }else{
+                ListNode node2 = node.next;
+                while(node2!=null&&node2.val==node.next.val){
+                    node2 = node2.next;
+                }
+                node.next = node2;
             }
-            if(time==1) p1 = p1.next;
-            p1.next = p2;
-            return newhead.next;
         }
+        return H.next;
     }
 }
