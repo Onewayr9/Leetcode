@@ -18,3 +18,43 @@ public class Solution {
         return 0;
     }
 }
+/*Moore voting algorithm*/
+public class Solution {
+    public int majorityElement(int[] num) {
+
+        int major=num[0], count = 1;
+        for(int i=1; i<num.length;i++){
+            if(count==0){
+                count++;
+                major=num[i];
+            }else if(major==num[i]){
+                count++;
+            }else count--;
+
+        }
+        return major;
+    }
+}
+/*Bit Manipulation*/
+public int majorityElement(int[] num) {
+
+    int ret = 0;
+
+    for (int i = 0; i < 32; i++) {
+
+        int ones = 0, zeros = 0;
+
+        for (int j = 0; j < num.length; j++) {
+            if ((num[j] & (1 << i)) != 0) {
+                ++ones;
+            }
+            else
+                ++zeros;
+        }
+
+        if (ones > zeros)
+            ret |= (1 << i);
+    }
+
+    return ret;
+}

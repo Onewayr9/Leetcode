@@ -1,10 +1,13 @@
 public class Solution {
     public int singleNumber(int[] nums) {
-        Arrays.sort(nums);
-        for(int i=0;i<nums.length-4;i+=3){
-            if(nums[i]!=nums[i+2])
-                return nums[i];
+        int one = 0,two = 0,three = 0;
+        for(int e:nums){
+            two |= one&e;
+            one ^= e;
+            three = one&two;
+            one &= ~three;
+            two &= ~three;
         }
-        return nums[nums.length-1];
+        return one;
     }
 }
