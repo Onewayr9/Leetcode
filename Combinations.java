@@ -1,24 +1,18 @@
 public class Solution {
-    List<List<Integer>> ans = new ArrayList<List<Integer>>();
+    List<List<Integer>> ans = new ArrayList<>();
     public List<List<Integer>> combine(int n, int k) {
-        if(n==0||n<k) return ans;
-        else{
-            List<Integer> temp = new ArrayList<Integer>();
-            combine(n,1,k,temp);
-        }
+        combineList(1,n,k,new ArrayList<>());
         return ans;
     }
-    public void combine(int n,int begin,int time,List<Integer> temp){
-        if(time==0){
-            List<Integer> tem2 = new ArrayList<Integer>();
-            tem2.addAll(temp);
-            ans.add(tem2);
-        }else{
-            for(int i=begin;i<=n-time+1;i++){
-                temp.add(i);
-                combine(n,i+1,time-1,temp);
-                temp.remove(temp.size()-1);
-            }
+    public void combineList(int start, int n, int k, List<Integer> temp){
+        if(k==0){
+            List<Integer> tempadd = new ArrayList<>(temp);
+            ans.add(tempadd);
+        }
+        for(int i=start;i<=n;i++){
+            temp.add(i);
+            combineList(i+1,n,k-1,temp);
+            temp.remove(temp.size()-1);
         }
     }
 }

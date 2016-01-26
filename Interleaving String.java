@@ -27,37 +27,24 @@ public class Solution {
 /**DP, the worst case time complexity is O(MN), Accepted*/
 public class Solution {
     public boolean isInterleave(String s1, String s2, String s3) {
-        if(s1.length()+s2.length()!=s3.length()){
+        int len_1 = s1.length();
+        int len_2 = s2.length();
+        if(len_1+len_2!=s3.length()){
             return false;
         }
-        char[] c1 = s1.toCharArray();
-        char[] c2 = s2.toCharArray();
-        char[] c3 = s3.toCharArray();
-        int len_1 = c1.length;
-        int len_2 = c2.length;
-        boolean[][] ans = new boolean[len_1+1][len_2+1];
-        ans[0][0] = true;
-        for(int i=1;i<=len_1;i++){
-            if(c3[i-1]==c1[i-1]){
-                ans[i][0] = ans[i-1][0];
-            }
-        }
-        for(int i=1;i<=len_2;i++){
-            if(c3[i-1]==c2[i-1]){
-                ans[0][i] = ans[0][i-1];
-            }
-        }
-        for(int i=1;i<=len_1;i++){
-            for(int j=1;j<=len_2;j++){
-                if(c1[i-1]==c3[i+j-1]&&c2[j-1]!=c3[i+j-1]){
-                    ans[i][j] = ans[i-1][j];
-                }else if(c1[i-1]!=c3[i+j-1]&&c2[j-1]==c3[i+j-1]){
-                    ans[i][j] = ans[i][j-1];
-                }else if(c1[i-1]==c3[i+j-1]&&c2[j-1]==c3[i+j-1]){
-                    ans[i][j] = ans[i-1][j]||ans[i][j-1];
+        boolean[][] dp = new boolean[len_1+1][len_2+1];
+        dp[0][0] = true;
+        for(int i=0;i<=len_1;i++){
+            for(int j=0;j<=len_2;j++){
+                if(i>0&&j>0){
+                    dp[i][j] = (dp[i-1][j]&&(s1.charAt(i-1)==s3.charAt(i+j-1)))||(dp[i][j-1]&&(s2.charAt(j-1)==s3.charAt(i+j-1)));
+                }else if(i>0){
+                    dp[i][j] = dp[i-1][j]&&(s1.charAt(i-1)==s3.charAt(i+j-1));
+                }else if(j>0){
+                    dp[i][j] = dp[i][j-1]&&(s2.charAt(j-1)==s3.charAt(i+j-1));
                 }
             }
         }
-        return ans[len_1][len_2];
+        return dp[len_1][len_2];
     }
 }
